@@ -16,8 +16,18 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from apps.login.models import User
+class UAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(User, UAdmin)
+
+from apps.travelbuddy.models import Trip
+class UTrip(admin.ModelAdmin):
+    pass
+admin.site.register(Trip, UTrip)
+
 urlpatterns = [
     url(r'^', include('apps.login.urls', namespace='login')),
     url(r'^travelbuddy/', include('apps.travelbuddy.urls', namespace='travelbuddy')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
 ]

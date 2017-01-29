@@ -13,10 +13,12 @@ def login(request):
     if request.method=='POST':
         loginForm = LoginForm(request.POST)
         if loginForm.is_valid():
-            response = User.objects.filter(email = request.POST['email'])
-            request.session['user_name'] = response[0].first_name
+            response = User.objects.filter(username = request.POST['username'])
+            request.session['user_name'] = response[0].username
             request.session['user_id'] = response[0].id
-            return render(request, 'login/success.html', context = {'logOrReg': 'logged in'})
+            # print "#"*50
+            # print "request session username: {}, id: {}".format(request.session['username'], request.session['id'])
+            return redirect(reverse('travelbuddy:index'))
         else:
             registrationForm = RegistrationForm()
             context = {'loginForm': loginForm, 'registrationForm': registrationForm}
@@ -33,10 +35,9 @@ def registration(request):
         loginForm = LoginForm()
         if registrationForm.is_valid():
             newUser = registrationForm.save()
-            request.session['user_name'] = newUser.first_name
+            request.session['user_name'] = newUser.username
             request.session['user_id'] = newUser.id
-            context = {'user_name': newUser.first_name, 'logOrReg': 'registered'}
-            return render(request, 'login/success.html', context)
+            return redirect(reverse('travelbuddy:index'))
     else:
         registrationForm = RegistrationForm()
         loginForm = LoginForm()
@@ -44,7 +45,9 @@ def registration(request):
     context = {"registrationForm": registrationForm, "loginForm": loginForm}
     return render(request, 'login/login.html', context)
 
-
+def logout(request):
+    request.session.flush()
+    return redirect(reverse('login:login'))
 
 def success(request):
 

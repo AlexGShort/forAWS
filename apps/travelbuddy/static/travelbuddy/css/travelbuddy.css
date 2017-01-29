@@ -1,0 +1,15 @@
+html {
+    background-color: grey;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+}
+.container {
+    background-color: white;
+    padding: 10px;
+}
+
+h1 {
+    font-size: 3.0rem;
+}

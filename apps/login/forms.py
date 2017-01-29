@@ -35,22 +35,17 @@ def validateMustContainNumber(value):
             _('This field must contain at least one number')
         )
 
-# class RegistrationForm(forms.ModelForm):
-#     confirm_password = forms.CharField(max_length = 255, widget=forms.PasswordInput)
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'email', 'password']
 
 class LoginForm(forms.ModelForm):
     password = forms.CharField(max_length=100, widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ['email', 'password']
+        fields = ['username', 'password']
 
     def clean(self):
         super(LoginForm, self).clean()
         password = self.cleaned_data.get('password').encode(encoding='utf-8', errors='strict')
-        response = User.objects.filter(email = self.cleaned_data.get('email'))
+        response = User.objects.filter(username = self.cleaned_data.get('username'))
         if (len(response) != 0):
             print "password: {}, hashed password: {}".format(password, response[0].password)
             password_db_hash = response[0].password.encode(encoding='utf-8', errors='strict')
@@ -58,35 +53,28 @@ class LoginForm(forms.ModelForm):
             print "hashed pw: {}".format(bcrypt.hashpw(password, password_db_hash) == password_db_hash)
             if (bcrypt.hashpw(password, password_db_hash) == password_db_hash):
                 print "*"*50
-                # request.session['user_id'] = response[0].id
-                # request.session['user_name'] = response[0].first_name
-                # return render(request, 'login/success.html')
             else:
-                msg = 'Email address and password do not match our records.'
-                self.add_error('email', msg)
+                msg = 'Username and password do not match our records.'
+                self.add_error('username', msg)
 
-                # flash('Email address and password do not match our records.')
-                # return False
         else:
-            msg = 'Email address and passwords do not match our records.'
-            self.add_error('email', msg)
+            msg = 'Username and passwords do not match our records.'
+            self.add_error('username', msg)
 
-            # flash('Email address does not match our records.  Please register or try again.')
-            # return False
 
 
 
 
 class RegistrationForm(forms.ModelForm):
 
-    first_name = forms.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
-    last_name = forms.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
+    name = forms.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
+    username = forms.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
     email = forms.EmailField(widget=forms.TextInput)
     password = forms.CharField(max_length=100, widget=forms.PasswordInput, validators=[validateLengthAtLeastEight, validateMustContainUpper, validateMustContainNumber])
     confirm_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password']
+        fields = ['name', 'username', 'email', 'password']
 
 
     def clean(self):

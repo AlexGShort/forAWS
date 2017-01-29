@@ -37,8 +37,8 @@ def validateMustContainNumber(value):
 
 # Create your models here.
 class User(models.Model):
-    first_name = models.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
-    last_name = models.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
+    name = models.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
+    username = models.CharField(max_length=45, validators=[validateLengthGreaterThanTwo, validateOnlyLetters])
     email = models.EmailField(max_length=45)
     password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)

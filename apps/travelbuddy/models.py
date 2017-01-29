@@ -1,15 +1,15 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from ..models import User
+from ..login.models import User
 
 # Create your models here.
-class Trip(models.Models):
-    destination = CharField(max_length=100)
-    description = TextField(max_length=1000)
-    date_from = DateTimeField()
-    date_to = DateTimeField()
-    owner = ForeignKey(User, on_delete=models.CASCADE)
-    participant = ManyToManyField(User)
-    created_at = DateTimeField(auto_now_add=True)
-    updated_at = DateTimeField(auto_now=True)
+class Trip(models.Model):
+    destination = models.CharField(max_length=100)
+    description = models.TextField(max_length=1000)
+    date_from = models.DateField()
+    date_to = models.DateField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    participant = models.ManyToManyField(User, related_name='participantToTrip')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
